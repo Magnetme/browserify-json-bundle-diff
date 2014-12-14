@@ -42,7 +42,7 @@ Resulting diff:
 ## Methods
 `var diff = require('browserify-json-bundle-diff');`
 
-### diff(from, to)
+### create(from, to)
 Generates a diff between two browserify-json-bundles. It will:
 - Put the version of `from` as the value for the `from` key in the diff
 - Put the version of `to` as the value for the `to` key in the diff
@@ -50,3 +50,10 @@ Generates a diff between two browserify-json-bundles. It will:
 - Add any module in `to` that is not equal to the same module in `from` to the `modules` hash
 - Add any module that is present in `from` but not in `to` to the `modules` hash with a value of `null`
 - Adds the `entry` from `to` if it is not equal to the `entry` from `from`.
+
+### merge([initialVersion], diffs)
+Merges several successive diffs together. This function can be used in 2 ways:
+
+- It can be called with a single array of successive diffs as it's only argument.
+- It can be called with an intial version as first argument and a function that returns successive diffs as the second argument.
+  This function should take a version as first argument and either return a diff with that version as base, or `false` when there are no more diffs available.
