@@ -6,8 +6,8 @@ From:
 {
 	"version" : 1,
 	"modules" : {
-		"./foo" : ["function(require,module,exports){console.log('foo');}",{}],
-		"./bar" : ["function(require,module,exports){console.log('bar');}",{}]
+		"./foo" : ["console.log('foo');",{}],
+		"./bar" : ["console.log('bar');",{}]
 	},
 	"entry" : ["./foo"]
 }
@@ -18,8 +18,8 @@ To:
 {
 	"version" : 2,
 	"modules" : {
-		"./foo" : ["function(require,module,exports){console.log('now I print something else');}",{}],
-		"./baz" : ["function(require,module,exports){console.log('baz');}",{}]
+		"./foo" : ["console.log('now I print something else');",{}],
+		"./baz" : ["console.log('baz');",{}]
 	},
 	"entry" : ["./baz"]
 }
@@ -31,9 +31,9 @@ Resulting diff:
 	"from" : 1,
 	"to" : 2,
 	"modules" : {
-		"./foo" : ["function(require,module,exports){console.log('now I print something else');}",{}],
+		"./foo" : ["console.log('now I print something else');",{}],
 		"./bar" : null,
-		"./baz" : ["function(require,module,exports){console.log('baz');}",{}]
+		"./baz" : ["console.log('baz');",{}]
 	},
 	"entry" : ["./baz"]
 }
@@ -51,9 +51,5 @@ Generates a diff between two browserify-json-bundles. It will:
 - Add any module that is present in `from` but not in `to` to the `modules` hash with a value of `null`
 - Adds the `entry` from `to` if it is not equal to the `entry` from `from`.
 
-### merge([initialVersion], diffs)
-Merges several successive diffs together. This function can be used in 2 ways:
-
-- It can be called with a single array of successive diffs as it's only argument.
-- It can be called with an intial version as first argument and a function that returns successive diffs as the second argument.
-  This function should take a version as first argument and either return a diff with that version as base, or `false` when there are no more diffs available.
+### merge(first, second)
+Merges two diffs together. It is required that the second diff is a direct successor of the first diff, that is `first.to === second.from`.

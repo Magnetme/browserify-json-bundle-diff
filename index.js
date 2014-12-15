@@ -34,44 +34,19 @@ module.exports = {
 
 		return diff;
 	},
-	mergeDiffs : function(initialVersion, diffs) {
-		if (!diffs) {
-			diffs = intitialVersion;
+	merge : function merge(first, second) {
+		if (first.to && second.from !== first.to) {
+			throw new Error('Invalid sequence of diffs: cannot apply diff from version ' + second.from + ' to version ' +
+											second.from + ' on a base with version ' + first.to + '. (idx: ' + key + ')');
 		}
-		//If we get a function as argument we use that to collect all diffs.
-		//This can be usefull to let external tools, such as git, provide the diffs.
-		if (typeof diffs === 'function') {
-			var getNext = diffs;
-			diffs = [];
-			var currentVersion = initialVersion;
-			var next;
-			do {
-				next = getNext(currentVersion);
-				if (next) {
-					diffs.push(next);
-					currentVersion = next.to;
-				}
-			} while (next);
+		var result = first;
+		result.to = second.to;
+		//We can just overwrite all new modules
+		for (var name in second.modules) {
+			result.modules[name] = second.modules[name];
 		}
-
-		//Diffs should now be an array of diffs, and we don't need initialVersion anymore.
-
-		return diffs.reduce(function(previous, current, key) {
-			//Check that we can actually stack the current diff on the previous
-			if (previous.to && current.from !== previous.to) {
-				throw new Error('Invalid sequence of diffs: cannot apply diff from version ' + current.from + ' to version ' +
-				                current.from + ' on a base with version ' + previous.to + '. (idx: ' + key + ')');
-			}
-			var result = previous;
-			result.from = result.from || current.from; //first one has to set the from field
-			result.to = current.to;
-			//We can just overwrite all new modules
-			for (var name in current.modules) {
-				result.modules[name] = current.modules[name];
-			}
-			//And also the entry property, if set
-			result.entry = current.entry || result.entry;
-			return result;
-		}, {});
+		//And also the entry property, if set
+		result.entry = second.entry || result.entry;
+		return result;
 	}
 };
