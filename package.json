@@ -1,6 +1,6 @@
 {
   "name": "browserify-json-bundle-diff",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generates a diff between two [browserify-json-bundles](https://github.com/Magnetme/browserify-json-bundler). This is part of the browserify-diff toolchain.",
   "main": "index.js",
   "dependencies": {
@@ -20,9 +20,9 @@
     "diff"
   ],
   "author": "Magnet.me (https://github.com/Magnetme)",
-  "contributors" : [
-	  "Tiddo Langerak<tiddolangerak@gmail.com>"
-	],
+  "contributors": [
+    "Tiddo Langerak<tiddolangerak@gmail.com>"
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Magnetme/browserify-json-bundle-diff/issues"
